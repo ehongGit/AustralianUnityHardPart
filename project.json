@@ -1,0 +1,14 @@
+{
+  "name": "AustralianUnityHardPart",
+  "description": "Simple Process Project",
+  "main": "Main.xaml",
+  "dependencies": {},
+  "excludedData": [
+    "Private:*",
+    "*password*"
+  ],
+  "toolVersion": "17.1.6435.21855",
+  "projectVersion": "1.0.6494.21106",
+  "packOptions": {},
+  "runtimeOptions": {}
+}

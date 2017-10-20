@@ -1,6 +1,7 @@
-<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Main_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Main_1"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:i="clr-namespace:Innovior;assembly=Innovior"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
@@ -67,6 +68,9 @@
       <Variable x:TypeArguments="sd:DataTable" Name="hardConfigDt" />
       <Variable x:TypeArguments="ui:Window" Name="window" />
       <Variable x:TypeArguments="x:Int32" Name="txtY" />
+      <Variable x:TypeArguments="sd:DataTable" Name="hardOutputDt" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="Document" />
+      <Variable x:TypeArguments="x:String" Name="pdfPath" />
     </Flowchart.Variables>
     <Flowchart.StartNode>
       <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_15">
@@ -92,8 +96,8 @@
           <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_12">
             <ui:CommentOut sap2010:WorkflowViewState.IdRef="CommentOut_1">
               <ui:CommentOut.Body>
-                <Sequence DisplayName="Ignored Activities">
-                  <ui:StartProcess WorkingDirectory="{x:Null}" Arguments="C:\Users\ehong\OneDrive\Documents\UiPath\ScrapeDemo\Ross Kennedy Comprehensive Assessment.pdf" DisplayName="Start pdf" FileName="C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.exe" sap2010:WorkflowViewState.IdRef="StartProcess_1" />
+                <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                  <ui:StartProcess WorkingDirectory="{x:Null}" Arguments="[pdfPath]" DisplayName="Start pdf" FileName="C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.exe" sap2010:WorkflowViewState.IdRef="StartProcess_1" />
                 </Sequence>
               </ui:CommentOut.Body>
             </ui:CommentOut>
@@ -142,6 +146,10 @@
                                     <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
                                   </ActivityAction.Argument>
                                   <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_23">
+                                    <Sequence.Variables>
+                                      <Variable x:TypeArguments="x:String" Name="pageNumTxt" />
+                                      <Variable x:TypeArguments="x:Int32" Name="pageNum" />
+                                    </Sequence.Variables>
                                     <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Press Ctrl F" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_2" Key="f" KeyModifiers="Ctrl" SendWindowMessages="False" SpecialKey="False">
                                       <ui:SendHotkey.Target>
                                         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[window]" WaitForReady="INTERACTIVE" />
@@ -157,14 +165,30 @@
                                         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
                                       </ui:SendHotkey.Target>
                                     </ui:SendHotkey>
+                                    <ui:GetFullText DisplayName="Get page Number" sap2010:WorkflowViewState.IdRef="GetFullText_1" IgnoreHidden="False">
+                                      <ui:GetFullText.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ffe27bd2a6e3a39971690e5e25fe3693" Selector="&lt;wnd cls='Edit' idx='4' /&gt;" WaitForReady="INTERACTIVE" />
+                                      </ui:GetFullText.Target>
+                                      <ui:GetFullText.Text>
+                                        <OutArgument x:TypeArguments="x:String">[pageNumTxt]</OutArgument>
+                                      </ui:GetFullText.Text>
+                                    </ui:GetFullText>
+                                    <Assign DisplayName="Convert txt to int" sap2010:WorkflowViewState.IdRef="Assign_9">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Int32">[pageNum]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Int32">[Convert.ToInt32(pageNumTxt)]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
                                     <Sequence DisplayName="Find relative image" sap2010:WorkflowViewState.IdRef="Sequence_21">
                                       <Sequence.Variables>
                                         <Variable x:TypeArguments="ui:Image" Name="img" />
                                         <Variable x:TypeArguments="sd1:Size" Name="size" />
                                         <Variable x:TypeArguments="ui:UiElement" Name="foundImg" />
                                         <Variable x:TypeArguments="sd1:Rectangle" Name="imgRect" />
-                                        <Variable x:TypeArguments="ui:GenericValue" Name="txtX" />
-                                        <Variable x:TypeArguments="ui:GenericValue" Name="txtHeight" />
+                                        <Variable x:TypeArguments="x:Int32" Name="txtX" />
+                                        <Variable x:TypeArguments="x:Int32" Name="txtHeight" />
                                         <Variable x:TypeArguments="ui:GenericValue" Name="txtWidth" />
                                       </Sequence.Variables>
                                       <ui:LoadImage DisplayName="Load image" FileName="[row(&quot;ImagePath&quot;).ToString]" sap2010:WorkflowViewState.IdRef="LoadImage_1" Image="[img]" />
@@ -186,10 +210,10 @@
                                       </Assign>
                                       <Assign DisplayName="Get X of txt " sap2010:WorkflowViewState.IdRef="Assign_4">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="ui:GenericValue">[txtX]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:Int32">[txtX]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="ui:GenericValue">[imgRect.X+Convert.ToInt32(row("DiffX"))]</InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">[imgRect.X+Convert.ToInt32(row("DiffX"))]</InArgument>
                                         </Assign.Value>
                                       </Assign>
                                       <Assign DisplayName="Get Y of txt" sap2010:WorkflowViewState.IdRef="Assign_6">
@@ -210,10 +234,10 @@
                                       </Assign>
                                       <Assign DisplayName="Get height of txt" sap2010:WorkflowViewState.IdRef="Assign_5">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="ui:GenericValue">[txtHeight]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:Int32">[txtHeight]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="ui:GenericValue">[Convert.ToInt32(row("Height"))]</InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">[Convert.ToInt32(row("Height"))]</InArgument>
                                         </Assign.Value>
                                       </Assign>
                                       <Assign DisplayName="Get txt region" sap2010:WorkflowViewState.IdRef="Assign_1">
@@ -224,21 +248,19 @@
                                           <InArgument x:TypeArguments="ui:Region">[new Uipath.Core.Region(new system.Drawing.Rectangle(txtX,txtY,txtWidth,txtHeight))]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:SetClippingRegion Element="{x:Null}" Size="{x:Null}" Direction="RECTANGLE" DisplayName="Translate clipping region" sap2010:WorkflowViewState.IdRef="SetClippingRegion_9" Region="[txtRegion]" />
+                                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[txtX.ToBoolean+&quot; &quot;+txtY.ToString]" />
+                                      <ui:SetClippingRegion Element="{x:Null}" Direction="RECTANGLE" DisplayName="Move the region" sap2010:WorkflowViewState.IdRef="SetClippingRegion_11" Region="[txtRegion]">
+                                        <ui:SetClippingRegion.Size>
+                                          <ui:Region Rectangle="0, 0, 0, 0" />
+                                        </ui:SetClippingRegion.Size>
+                                      </ui:SetClippingRegion>
                                       <ui:Highlight Color="Red" HighlightTime="1000" sap2010:WorkflowViewState.IdRef="Highlight_4">
                                         <ui:Highlight.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
                                         </ui:Highlight.Target>
                                       </ui:Highlight>
+                                      <i:GetTextFromPDFLocation DisplayName="Get text from PDF location" Height="[txtHeight]" sap2010:WorkflowViewState.IdRef="GetTextFromPDFLocation_1" PageNumber="[pageNum]" Path="[pdfPath]" ReadingResult="[txt]" Width="[txtWidth]" X="[txtX]" Y="[txtY]" />
                                     </Sequence>
-                                    <ui:GetFullText DisplayName="Get full text" sap2010:WorkflowViewState.IdRef="GetFullText_4" IgnoreHidden="True">
-                                      <ui:GetFullText.Target>
-                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
-                                      </ui:GetFullText.Target>
-                                      <ui:GetFullText.Text>
-                                        <OutArgument x:TypeArguments="x:String">[txt]</OutArgument>
-                                      </ui:GetFullText.Text>
-                                    </ui:GetFullText>
                                     <ui:SetClippingRegion Element="{x:Null}" Region="{x:Null}" Direction="RECTANGLE" DisplayName="Reset clipping region" sap2010:WorkflowViewState.IdRef="SetClippingRegion_10">
                                       <ui:SetClippingRegion.Size>
                                         <ui:Region Rectangle="0, 0, 0, 0" />
@@ -252,6 +274,7 @@
                                         <InArgument x:TypeArguments="x:Object">[txt]</InArgument>
                                       </Assign.Value>
                                     </Assign>
+                                    <WriteLine DisplayName="Write line" sap2010:WorkflowViewState.IdRef="WriteLine_4" Text="[txt]" />
                                   </Sequence>
                                 </ActivityAction>
                               </ui:ForEachRow.Body>
@@ -260,6 +283,37 @@
                         </ActivityAction>
                       </ui:WindowScope.Body>
                     </ui:WindowScope>
+                    <FlowStep.Next>
+                      <FlowStep x:Name="__ReferenceID6" sap2010:WorkflowViewState.IdRef="FlowStep_22">
+                        <ui:BuildDataTable DataTable="[hardOutputDt]" DisplayName="Build Output table" sap2010:WorkflowViewState.IdRef="BuildDataTable_1" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Domain&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Section&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Label&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Type&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Value&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+                        <FlowStep.Next>
+                          <FlowStep x:Name="__ReferenceID5" sap2010:WorkflowViewState.IdRef="FlowStep_21">
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Fill in OutputDt" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FillInOutputDt.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InOutArgument x:TypeArguments="sd:DataTable" x:Key="outputDt">[hardOutputDt]</InOutArgument>
+                                <InArgument x:TypeArguments="sd:DataTable" x:Key="configDt">[hardConfigDt]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                            <FlowStep.Next>
+                              <FlowStep x:Name="__ReferenceID4" sap2010:WorkflowViewState.IdRef="FlowStep_18">
+                                <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Write to output" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_2" Visible="False" WorkbookPath="Result.xlsx">
+                                  <ui:ExcelApplicationScope.Body>
+                                    <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                                      <ActivityAction.Argument>
+                                        <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                                      </ActivityAction.Argument>
+                                      <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                                        <ui:ExcelWriteRange AddHeaders="True" DataTable="[hardOutputDt]" DisplayName="Write Range" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_1" SheetName="HardOutput" StartingCell="A1" />
+                                      </Sequence>
+                                    </ActivityAction>
+                                  </ui:ExcelApplicationScope.Body>
+                                </ui:ExcelApplicationScope>
+                              </FlowStep>
+                            </FlowStep.Next>
+                          </FlowStep>
+                        </FlowStep.Next>
+                      </FlowStep>
+                    </FlowStep.Next>
                   </FlowStep>
                 </FlowStep.Next>
               </FlowStep>
@@ -279,7 +333,16 @@
     </FlowStep>
     <x:Reference>__ReferenceID2</x:Reference>
     <x:Reference>__ReferenceID3</x:Reference>
-    <sads:DebugSymbol.Symbol>dw1DOlxFbXB0eS54YW1sAA==</sads:DebugSymbol.Symbol>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <FlowStep sap2010:WorkflowViewState.IdRef="FlowStep_19">
+      <ui:Comment sap2010:WorkflowViewState.IdRef="Comment_1" Text="// Start the pdf" />
+    </FlowStep>
+    <FlowStep sap2010:WorkflowViewState.IdRef="FlowStep_20">
+      <ui:Comment sap2010:WorkflowViewState.IdRef="Comment_2" Text="//Wait for the pdf being processing" />
+    </FlowStep>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+    <sads:DebugSymbol.Symbol>d0xDOlxVc2Vyc1xlaG9uZ1xEb2N1bWVudHNcR2l0SHViXEF1c3RyYWxpYW5Vbml0eUhhcmRQYXJ0XE1haW4oQXV0b3NhdmVkKS54YW1sWUAD2gIPAgEBTQleJAIBbmENZx0CAW1qEXUhAgFseBWdAiYCAROgAhmgAuIMAgEQowIdqAI1AgEKqwIhtgI8AgECTa0BTcUBAgF1Uw9bGgIBb3joAXiqAgIBa3h1eH8CAWl+G5oCJgIBFKACNqACRgIBEaYCXaYCawIBDqUCYKUCbgIBDKMCxQGjAtoBAgELqwLEAasC0QECAQmxAiezAjICAQNUEVolAgFwfx2NASgCAWeOAR2ZAi0CARWyAimyAuMBAgEEVEBUUAIBc1cXV0YCAXJUpwFUsQECAXGLAbABiwGtAgIBaI4BNo4BRgIBZZQBI5YCLgIBFrIC3AGyAuABAgEIsgJZsgJpAgEGsgLCAbICzgECAQWZASWdATUCAWKeASWiATMCAV+jASWnATUCAV6oASWvATYCAVqwASW3AS4CAVa4ASWHAjACAR+IAiWMAjwCAR6NAiWUAi4CARqVAiWVAoYBAgEXmwF/mwGJAQIBY6ABuAGgAeABAgFhngG2Ap4B2QICAWCqAbgBqgHaAQIBXa0BUa0BXQIBW7UBT7UBbAIBWbIBULIBWQIBV8IBJ8IBvQECAVLDASfKATwCAUzLASfSATACAUjTASfaATACAUTbASfiATACAUDjASfqATACATzrASfyATACATjzASf6ATACATT7ASf7AcUBAgEy/AEngAI+AgEvgQInhQI2AgEuhgInhgKjAgIBIJICUJICVQIBHI8CUY8CXwIBG5UCfJUCgwECARjCAVfCAX4CAVXCAbMBwgG6AQIBU8MBbsMBegIBUMUBbcUBdAIBTsUBYcUBZgIBTdABV9ABdQIBS80BWM0BYQIBSdgBUdgBegIBR9UBUtUBWAIBReABUeABfAIBQ90BUt0BWAIBQegBWegBeAIBP+UBWuUBZAIBPfABUfABcQIBO+0BUu0BXQIBOfgBU/gBpwECATf1AVT1AV8CATX7AZQB+wHCAQIBM/wBwgH8Ac8BAgEwhgJxhgJ+AgEshgLFAYYC0AECASqGAvABhgL3AQIBKIYC1gGGAuEBAgEmhgKNAoYClQICASSGApgChgKgAgIBIoYC/gGGAooCAgEh</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -298,7 +361,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="StartProcess_1" sap:VirtualizedContainerService.HintSize="200,52.6666666666667">
+      <sap2010:ViewStateData Id="StartProcess_1" sap:VirtualizedContainerService.HintSize="314,86.6666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="336,210.666666666667">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -318,6 +388,8 @@
       <sap2010:ViewStateData Id="SendHotkey_2" sap:VirtualizedContainerService.HintSize="336,117.333333333333" />
       <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="336,134" />
       <sap2010:ViewStateData Id="SendHotkey_3" sap:VirtualizedContainerService.HintSize="336,117.333333333333" />
+      <sap2010:ViewStateData Id="GetFullText_1" sap:VirtualizedContainerService.HintSize="336,106" />
+      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="336,60.6666666666667" />
       <sap2010:ViewStateData Id="LoadImage_1" sap:VirtualizedContainerService.HintSize="314,58.6666666666667" />
       <sap2010:ViewStateData Id="WaitImageAppear_5" sap:VirtualizedContainerService.HintSize="314,68" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="314,60.6666666666667" />
@@ -326,39 +398,103 @@
       <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="314,60.6666666666667" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="314,60.6666666666667" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="314,60.6666666666667" />
-      <sap2010:ViewStateData Id="SetClippingRegion_9" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,94.6666666666667" />
+      <sap2010:ViewStateData Id="SetClippingRegion_11" sap:VirtualizedContainerService.HintSize="314,22" />
       <sap2010:ViewStateData Id="Highlight_4" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,1064.66666666667">
+      <sap2010:ViewStateData Id="GetTextFromPDFLocation_1" sap:VirtualizedContainerService.HintSize="314,22">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetFullText_4" sap:VirtualizedContainerService.HintSize="336,68" />
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,1261.33333333333">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="SetClippingRegion_10" sap:VirtualizedContainerService.HintSize="336,22" />
       <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="336,60.6666666666667" />
-      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="358,1948">
+      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="336,62.6666666666667" />
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="358,2386">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEachRow_2" sap:VirtualizedContainerService.HintSize="388,2096.66666666667" />
-      <sap2010:ViewStateData Id="Sequence_22" sap:VirtualizedContainerService.HintSize="410,2366.66666666667">
+      <sap2010:ViewStateData Id="ForEachRow_2" sap:VirtualizedContainerService.HintSize="388,2534.66666666667" />
+      <sap2010:ViewStateData Id="Sequence_22" sap:VirtualizedContainerService.HintSize="410,2804.66666666667">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_5" sap:VirtualizedContainerService.HintSize="424,2474.66666666667" />
+      <sap2010:ViewStateData Id="WindowScope_5" sap:VirtualizedContainerService.HintSize="424,2912.66666666667" />
+      <sap2010:ViewStateData Id="BuildDataTable_1" sap:VirtualizedContainerService.HintSize="200,52.6666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="200,52.6666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelWriteRange_1" sap:VirtualizedContainerService.HintSize="314,86.6666666666667" />
+      <sap2010:ViewStateData Id="Sequence_24" sap:VirtualizedContainerService.HintSize="336,210.666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelApplicationScope_2" sap:VirtualizedContainerService.HintSize="200,52.6666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_18">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">260,575.166666666667</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.6666666666667</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">260,505.166666666667</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.6666666666667</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">360,557.833333333333 360,575.166666666667</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">260,435.166666666667</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.6666666666667</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">360,487.833333333333 360,505.166666666667</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="FlowStep_17">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <av:Point x:Key="ShapeLocation">260,362.5</av:Point>
             <av:Size x:Key="ShapeSize">200,52.6666666666667</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">360,415.166666666667 360,435.166666666667</av:PointCollection>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -404,18 +540,49 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="738,636">
+      <sap2010:ViewStateData Id="Comment_1" sap:VirtualizedContainerService.HintSize="314,55.3333333333333">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_19">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">473,162.333333333333</av:Point>
+            <av:Size x:Key="ShapeSize">314,55.3333333333333</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Comment_2" sap:VirtualizedContainerService.HintSize="314,55.3333333333333">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_20">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">473,252.333333333333</av:Point>
+            <av:Size x:Key="ShapeSize">314,55.3333333333333</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="811.333333333333,864">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <av:Point x:Key="ShapeLocation">330,2.5</av:Point>
             <av:Size x:Key="ShapeSize">60,74.6666666666667</av:Size>
             <av:PointCollection x:Key="ConnectorLocation">360,77.1666666666667 360,97.1666666666667</av:PointCollection>
-            <x:Double x:Key="Width">724</x:Double>
+            <x:Double x:Key="Width">797</x:Double>
+            <x:Double x:Key="Height">827.8333333333336</x:Double>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Main_1" sap:VirtualizedContainerService.HintSize="778,716" />
+      <sap2010:ViewStateData Id="Main_1" sap:VirtualizedContainerService.HintSize="851.333333333333,904" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

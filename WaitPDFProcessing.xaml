@@ -85,73 +85,79 @@
               <Variable x:TypeArguments="x:String" Name="text" />
             </Sequence.Variables>
             <Sequence DisplayName="Wait for processing" sap2010:WorkflowViewState.IdRef="Sequence_46">
+              <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Maximize the pdf" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_5" Key="up" KeyModifiers="Win" SendWindowMessages="False" SpecialKey="True">
+                <ui:SendHotkey.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[window]" InformativeScreenshot="28dfddd6c24a094f14c44776d08fab17" WaitForReady="INTERACTIVE" />
+                </ui:SendHotkey.Target>
+              </ui:SendHotkey>
               <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Send 'PageDown' to pop the window" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_4" Key="pgdn" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
                 <ui:SendHotkey.Target>
                   <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[window]" InformativeScreenshot="28dfddd6c24a094f14c44776d08fab17" WaitForReady="INTERACTIVE" />
                 </ui:SendHotkey.Target>
               </ui:SendHotkey>
-              <ui:OnUiElementAppear ContinueOnError="{x:Null}" FoundElement="{x:Null}" DisplayName="Wait for pop up window" sap2010:WorkflowViewState.IdRef="OnUiElementAppear_4" RepeatForever="False" WaitActive="False" WaitVisible="False">
-                <ui:OnUiElementAppear.Body>
-                  <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_50">
-                    <ui:WaitUiElementVanish DisplayName="Wait popup window vanish" sap2010:WorkflowViewState.IdRef="WaitUiElementVanish_6" WaitNotActive="False" WaitNotVisible="False">
-                      <ui:WaitUiElementVanish.Target>
-                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="958072fe7dbc828f7d7c0ff197a88102" Selector="&lt;wnd app='acrord32.exe' cls='#32770' title='Content Preparation Progress' /&gt;&lt;wnd cls='GroupBox' idx='1' /&gt;" TimeoutMS="60000" WaitForReady="INTERACTIVE" />
-                      </ui:WaitUiElementVanish.Target>
-                    </ui:WaitUiElementVanish>
-                  </Sequence>
-                </ui:OnUiElementAppear.Body>
-                <ui:OnUiElementAppear.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="29f8983d2142888e84271114d6b9230d" Selector="&lt;wnd app='acrord32.exe' cls='#32770' title='Content Preparation Progress' /&gt;&lt;wnd cls='GroupBox' idx='1' /&gt;" TimeoutMS="50000" WaitForReady="INTERACTIVE" />
-                </ui:OnUiElementAppear.Target>
-              </ui:OnUiElementAppear>
             </Sequence>
           </Sequence>
         </ActivityAction>
       </ui:WindowScope.Body>
     </ui:WindowScope>
-    <sads:DebugSymbol.Symbol>d1dDOlxVc2Vyc1xlaG9uZ1xPbmVEcml2ZVxEb2N1bWVudHNcVWlQYXRoXEF1c3RyYWxpYW5Vbml0eUhhcmRQYXJ0XFdhaXRQREZQcm9jZXNzaW5nLnhhbWwQSQNxDgIBAU0FbxYCAQJNgwJNxgICARJNZU1vAgEQUwtsFgIBA1cNaxgCAQRYD1wfAgENXQ9qJgIBBVppWnMCAQ5fE2UeAgEJXcEBXcgBAgEGaI0BaIUCAgEIaJACaJcCAgEHYBVkLgIBCmKTAWKLAgIBDGKWAmKdAgIBCw==</sads:DebugSymbol.Symbol>
+    <ui:OnUiElementAppear ContinueOnError="{x:Null}" FoundElement="{x:Null}" DisplayName="Wait for pop up window" sap2010:WorkflowViewState.IdRef="OnUiElementAppear_5" RepeatForever="False" WaitActive="False" WaitVisible="False">
+      <ui:OnUiElementAppear.Body>
+        <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_51">
+          <ui:WaitUiElementVanish DisplayName="Wait popup window vanish" sap2010:WorkflowViewState.IdRef="WaitUiElementVanish_7" WaitNotActive="False" WaitNotVisible="False">
+            <ui:WaitUiElementVanish.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="958072fe7dbc828f7d7c0ff197a88102" Selector="&lt;wnd app='acrobat.exe' cls='#32770' title='Content Preparation Progress' /&gt;&lt;wnd cls='GroupBox' idx='1' /&gt;" TimeoutMS="60000" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementVanish.Target>
+          </ui:WaitUiElementVanish>
+        </Sequence>
+      </ui:OnUiElementAppear.Body>
+      <ui:OnUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="bc6dfcda1c047d1f8f71d75a239c909c" Selector="&lt;wnd app='acrobat.exe' cls='#32770' title='Content Preparation Progress' /&gt;&lt;wnd cls='GroupBox' idx='1' /&gt;" TimeoutMS="50000" WaitForReady="INTERACTIVE" />
+      </ui:OnUiElementAppear.Target>
+    </ui:OnUiElementAppear>
+    <sads:DebugSymbol.Symbol>d05DOlxVc2Vyc1xlaG9uZ1xEb2N1bWVudHNcR2l0SHViXEF1c3RyYWxpYW5Vbml0eUhhcmRQYXJ0XFdhaXRQREZQcm9jZXNzaW5nLnhhbWwSSQN2DgIBAU0FZhYCAQpnBXQcAgECTYMCTcYCAgEVTWVNbwIBE1MLYxYCAQtpCW8UAgEGZ7cBZ74BAgEDcoMBcvoBAgEFcoUCcowCAgEEVw1iGAIBDGoLbiQCAQdYD1wfAgEQXQ9hHwIBDWyJAWyAAgIBCWyLAmySAgIBCFppWnMCARFfaV9zAgEO</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="SendHotkey_4" sap:VirtualizedContainerService.HintSize="414,155.333333333333" />
-      <sap2010:ViewStateData Id="WaitUiElementVanish_6" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Sequence_50" sap:VirtualizedContainerService.HintSize="336,230">
+      <sap2010:ViewStateData Id="SendHotkey_5" sap:VirtualizedContainerService.HintSize="314,154" />
+      <sap2010:ViewStateData Id="SendHotkey_4" sap:VirtualizedContainerService.HintSize="314,154" />
+      <sap2010:ViewStateData Id="Sequence_46" sap:VirtualizedContainerService.HintSize="336,472">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="OnUiElementAppear_4" sap:VirtualizedContainerService.HintSize="414,406" />
-      <sap2010:ViewStateData Id="Sequence_46" sap:VirtualizedContainerService.HintSize="436,725.333333333333">
+      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="358,596">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="458,849.333333333333">
+      <sap2010:ViewStateData Id="WindowScope_4" sap:VirtualizedContainerService.HintSize="414,742">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WindowScope_4" sap:VirtualizedContainerService.HintSize="472,995.333333333333">
+      <sap2010:ViewStateData Id="WaitUiElementVanish_7" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_51" sap:VirtualizedContainerService.HintSize="336,230">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_33" sap:VirtualizedContainerService.HintSize="494,1119.33333333333">
+      <sap2010:ViewStateData Id="OnUiElementAppear_5" sap:VirtualizedContainerService.HintSize="414,406" />
+      <sap2010:ViewStateData Id="Sequence_33" sap:VirtualizedContainerService.HintSize="436,1312">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitPDFProcessing_1" sap:VirtualizedContainerService.HintSize="534,1239.33333333333" />
+      <sap2010:ViewStateData Id="WaitPDFProcessing_1" sap:VirtualizedContainerService.HintSize="476,1872" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
